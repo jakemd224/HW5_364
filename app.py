@@ -129,6 +129,13 @@ def all_lists():
     lsts = TodoList.query.all()
     return render_template('all_lists.html',todo_lists=lsts, form=form)
 
+
+@app.route('/all_lists2',methods=["GET","POST"])
+def all_lists2():
+    form = UpdateButtonForm()
+    lsts = TodoList.query.all()
+    return render_template('all_lists.html',todo_lists=lsts, form=form)
+
 # TODO 364: Update the all_lists.html template and the all_lists view function such that there is a delete button available for each ToDoList saved.
 # When you click on the delete button for each list, that list should get deleted -- this is also addressed in a later TODO.
 
@@ -150,8 +157,6 @@ def update(item):
     if request.method == "POST":
         itm = TodoItem.query.filter_by(id=item).first()
         itm.priority = int(form.priority.data)
-        print(form.priority.data)
-        print("hi")
         db.session.commit()
         flash("Updated priority of item: " + itm.description)
         return redirect('/all_lists')
@@ -168,6 +173,9 @@ def update(item):
 def delete(lst):
     if request.method == "POST":
         lst = TodoList.query.filter_by(id=lst).first()
+        items = lst.items
+        for item in items:
+            db.session.delete(item)
         db.session.delete(lst)
         db.session.commit()
     flash("Successfully deleted " + lst.title)
