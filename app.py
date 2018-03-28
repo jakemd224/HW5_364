@@ -77,6 +77,8 @@ class UpdatePriority(FlaskForm):
 class DeleteButtonForm(FlaskForm):
     submit = SubmitField("Delete")
 
+class CompleteTask(FlaskForm):
+    submit = SubmitField("Completed")
 
 ################################
 ####### Helper Functions #######
@@ -129,12 +131,19 @@ def all_lists():
     lsts = TodoList.query.all()
     return render_template('all_lists.html',todo_lists=lsts, form=form)
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> f675c7a74fd0935279d7fd8d7de0bbdbf7b21b28
 @app.route('/all_lists2',methods=["GET","POST"])
 def all_lists2():
     form = UpdateButtonForm()
     lsts = TodoList.query.all()
+<<<<<<< HEAD
+    return render_template('all_lists2.html',todo_lists=lsts, form=form)
+=======
     return render_template('all_lists.html',todo_lists=lsts, form=form)
+>>>>>>> f675c7a74fd0935279d7fd8d7de0bbdbf7b21b28
 
 # TODO 364: Update the all_lists.html template and the all_lists view function such that there is a delete button available for each ToDoList saved.
 # When you click on the delete button for each list, that list should get deleted -- this is also addressed in a later TODO.
@@ -184,6 +193,22 @@ def delete(lst):
     # Should flash a message about what was deleted, e.g. Deleted list <title of list>
     # And should redirect the user to the page showing all the todo lists
     # HINT: Compare against what you've done for updating and class notes -- the goal here is very similar, and in some ways simpler.
+
+@app.route('/list2/<ident>',methods=["GET","POST"])
+def one_list2(ident):
+    form = CompleteTask()
+    lst = TodoList.query.filter_by(id=ident).first()
+    items = lst.items.all()
+    return render_template('list_tpl2.html',todolist=lst,items=items,form=form)
+
+@app.route('/updateList/<item>',methods=["GET","POST"])
+def updateList(item):
+    if request.method == "POST":
+        itm = TodoItem.query.filter_by(id=item).first()
+        db.session.delete(itm)
+        db.session.commit()
+    flash("Successfully completed " + itm.description)
+    return redirect(url_for('all_lists2'))
 
 if __name__ == "__main__":
     db.create_all()
