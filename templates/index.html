@@ -1,7 +1,8 @@
 <h1>Home</h1>
 {% block nav %}
     <a href="{{ url_for('index') }}">Home</a><br>
-    <a href="{{ url_for('all_lists') }}">All TODO lists</a><br>
+    <a href="{{ url_for('all_lists') }}">All TODO lists</a> - able to delete lists from here<br>
+    <a href="{{ url_for('all_lists2') }}">All TODO lists</a> - able to update list from here<br>
 {% endblock %}
 
 {% block content %}
